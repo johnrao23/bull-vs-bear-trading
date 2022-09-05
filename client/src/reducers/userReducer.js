@@ -1,0 +1,26 @@
+import { REFRESH_USER_DATA, DELETE_USER_DATA } from "../actions/types";
+
+const initialState = {
+  user: null,
+  balance: ""
+};
+
+export default function(state = initialState, action) {
+  switch (action.type) {
+    case REFRESH_USER_DATA:
+      return {
+        ...state,
+        user: action.payload
+        //balance: action.payload.balance
+      };
+
+    case DELETE_USER_DATA:
+      return {
+        ...state,
+        user: state.user.filter(user => user._id !== action.payload)
+      };
+
+    default:
+      return state;
+  }
+}
