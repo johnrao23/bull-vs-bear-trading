@@ -1,4 +1,4 @@
-import { REFRESH_USER_DATA, DELETE_USER_DATA } from "../actions/types";
+import { REFRESH_USER_DATA, RESET_USER_DATA } from "../actions/types";
 
 const initialState = {
   user: null,
@@ -14,7 +14,7 @@ export default function(state = initialState, action) {
         //balance: action.payload.balance
       };
 
-    case DELETE_USER_DATA:
+    case RESET_USER_DATA:
       return {
         ...state,
         user: state.user.filter(user => user._id !== action.payload)
