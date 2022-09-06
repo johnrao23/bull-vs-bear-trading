@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import NavBar from "./NavBar";
 import { refreshUserData } from "../actions/userActions";
 import Footerv2 from "./Footerv2";
+import ResetAccount from "./ResetAccount";
 
 class Account extends Component {
   state = {
@@ -39,6 +40,7 @@ class Account extends Component {
         <NavBar />
         
         <StockHistory />
+        <ResetAccount />
         <Footerv2 />
       </div>
     );
