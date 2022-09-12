@@ -73,6 +73,15 @@ router.post("/data", (req, res) => {
     .catch((err) => res.status(404).json({ success: false }));
 });
 
+// router.post("/reset", (req, res) => {
+//   console.log(
+//     "Req.body.id on api/user/data is: " + JSON.stringify(req.body.id)
+//   );
+//   User.findById(req.body.id) //or change this to just req.body.user   if you map id to user in body
+//     .then((user) => res.json(user))
+//     .catch((err) => res.status(404).json({ success: false }));
+// });
+
 //DELETE User
 router.delete("/:id", (req, res) => {
   User.findById(req.params.id)
