@@ -80,6 +80,10 @@ router.post("/data", (req, res) => {
 //   User.findById(req.body.id) //or change this to just req.body.user   if you map id to user in body
 //     .then((user) => res.json(user))
 //     .catch((err) => res.status(404).json({ success: false }));
+// await User.updateOne(
+//   { _id: req.body.user.id },
+//   { $set: { balance: initialBalance } }
+// );
 // });
 
 //DELETE User
