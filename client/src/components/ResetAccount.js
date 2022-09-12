@@ -4,6 +4,7 @@ import { logout } from "../actions/authActions";
 import Nav from "react-bootstrap/Nav";
 import PropTypes from "prop-types";
 import { refreshUserData, resetUserData } from "../actions/userActions";
+import { Row } from "react-bootstrap";
 
 
 class ResetAccount extends Component {
@@ -16,7 +17,9 @@ class ResetAccount extends Component {
   
     render() {
       return (
-        <button>Reset Account</button>
+        <Row className="mt-4 mb-4 justify-content-center">
+          <button>Reset Account</button>
+        </Row>
       );
     }
   }
