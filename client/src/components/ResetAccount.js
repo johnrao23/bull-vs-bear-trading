@@ -6,22 +6,8 @@ import PropTypes from "prop-types";
 import { refreshUserData, resetUserData } from "../actions/userActions";
 import { Row } from "react-bootstrap";
 
-
-class ResetAccount extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        loading: false
-      };
-    }
-  
-    render() {
-      return (
-        <Row className="mt-4 mb-4 justify-content-center">
-          <button>Reset Account</button>
-        </Row>
-      );
-    }
-  }
+const ResetAccount = () => {
+  return <button onClick={() => resetUserData()}>Reset Account</button>;
+};
 
 export default ResetAccount;

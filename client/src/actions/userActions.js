@@ -3,42 +3,46 @@ import axios from "axios";
 import { REFRESH_USER_DATA, RESET_USER_DATA } from "./types";
 import { returnErrors } from "./errorActions";
 
-export const refreshUserData = user => dispatch => {
+export const refreshUserData = (user) => (dispatch) => {
   // User loading. dispatch this action, Pass this in before anything to change the state of application to loading
   axios
     .post("/api/user/data", user)
-    .then(res =>
+    .then((res) =>
       dispatch({
         type: REFRESH_USER_DATA,
-        payload: res.data //
+        payload: res.data, //
       })
     )
     //call error action to get errors if there are some. returnErrors takes in parameters, then returns object with errors
-    .catch(err => {
+    .catch((err) => {
       dispatch(returnErrors(err));
     });
 
   return {
     type: REFRESH_USER_DATA,
-    payload: user
+    payload: user,
   };
 };
 
-export const resetUserData = user => dispatch => {
+export const resetUserData = (user) => (dispatch) => {
   axios
-    .post("/api/user/data", user)
-    .then(res =>
+    .post("/api/user/reset", user)
+    .then((res) => {
+      console.log("Reset user data: ", res.data);
       dispatch({
         type: RESET_USER_DATA,
-        payload: res.data 
-      })
-    )
-    .catch(err => {
+        payload: res.data,
+      });
+      dispatch({
+        type: RESET_STOCK_DATA,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
       dispatch(returnErrors(err));
     });
-
   return {
     type: RESET_USER_DATA,
-    payload: user
+    payload: user,
   };
 };
