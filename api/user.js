@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
+const Stock = require("../models/stock");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const authorize = require("../middleware/authorize");
@@ -74,7 +75,7 @@ router.post("/data", (req, res) => {
 });
 
 router.post("/reset", authorize, async (req, res) => {
-  // console.log("Request body for /reset", req.body);
+  console.log("Request body for /reset", req.body);
   // const findUser = await User.findById(req.body.user.id);
   // User.findById(req.body.id) //or change this to just req.body.user   if you map id to user in body
   await User.updateOne(
@@ -82,7 +83,7 @@ router.post("/reset", authorize, async (req, res) => {
     { $set: { balance: 100000 } }
   );
   Stock.findById(req.body.id)
-    .then((stock) => stock.remove().then((stock) => res.json(stock._id)))
+    .then((stock) => stock.removeAll().then((stock) => res.json(stock._id)))
     .catch((err) => res.status(404).json({ success: false }));
 });
 
