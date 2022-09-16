@@ -75,15 +75,17 @@ router.post("/data", (req, res) => {
 });
 
 router.post("/reset", authorize, async (req, res) => {
-  console.log("Request body for /reset", req.body);
+  // console.log("Request body for /reset", req.body);
   // const findUser = await User.findById(req.body.user.id);
   // User.findById(req.body.id) //or change this to just req.body.user   if you map id to user in body
   await User.updateOne(
     { _id: req.body.user.id },
-    { $set: { balance: 100000 } }
+    { $set: { balance: 100000 } },
+    { $pull: { history: "" } }
   );
+
   Stock.findById(req.body.id)
-    .then((stock) => stock.removeAll().then((stock) => res.json(stock._id)))
+    .then((stock) => stock.remove().then((stock) => res.json(stock._id)))
     .catch((err) => res.status(404).json({ success: false }));
 });
 
