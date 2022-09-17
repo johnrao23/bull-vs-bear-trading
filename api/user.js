@@ -80,8 +80,8 @@ router.post("/reset", authorize, async (req, res) => {
   // User.findById(req.body.id) //or change this to just req.body.user   if you map id to user in body
   await User.updateOne(
     { _id: req.body.user.id },
-    { $set: { balance: 100000 } },
-    { $pull: { history: "" } }
+    { $set: { history: [] } },
+    { $set: { balance: 100000 } }
   );
 
   Stock.findById(req.body.id)
