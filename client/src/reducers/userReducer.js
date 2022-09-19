@@ -17,7 +17,7 @@ export default function (state = initialState, action) {
     case RESET_USER_DATA:
       return {
         ...state,
-        user: state.user.filter((user) => user._id !== action.payload),
+        user: action.payload,
       };
 
     default:
