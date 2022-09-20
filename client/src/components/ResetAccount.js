@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { resetUserData, resetStockData } from "../actions/userActions";
 import { Row } from "react-bootstrap";
 
 const ResetAccount = () => {
-  const [state, setState] = useState(props.initialState);
   const handleReset = (user) => {
     props.resetUserData(user);
     props.resetStockData(user);
