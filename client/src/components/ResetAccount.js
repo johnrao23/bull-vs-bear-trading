@@ -1,22 +1,39 @@
-import React, { Component, Fragment } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import { logout } from "../actions/authActions";
-import Nav from "react-bootstrap/Nav";
-import PropTypes from "prop-types";
 import { resetUserData, resetStockData } from "../actions/userActions";
 import { Row } from "react-bootstrap";
 
 const ResetAccount = () => {
+  const [state, setState] = useState(props.initialState);
+  const handleReset = (user) => {
+    props.resetUserData(user);
+    props.resetStockData(user);
+  };
+
   return (
-    <button
-      onClick={() => {
-        resetUserData();
-        resetStockData();
-      }}
-    >
-      Reset Account
-    </button>
+    <Row className="mt-4 mb-4 justify-content-center">
+      <button
+        onClick={() => {
+          handleReset();
+        }}
+      >
+        Reset Account
+      </button>
+    </Row>
   );
 };
 
-export default ResetAccount;
+const mapStateToProps = (state) => ({
+  stock: state.stock,
+  isAuthenticated: state.auth.isAuthenticated,
+  auth: state.auth,
+  error: state.error,
+  success: state.success,
+  user: state.user,
+  history: state.user.history,
+  balance: state.user.balance,
+});
+
+export default connect(mapStateToProps, { resetUserData, resetStockData })(
+  ResetAccount
+);

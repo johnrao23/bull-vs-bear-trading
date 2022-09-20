@@ -21,7 +21,7 @@ mapStateToProps we want to map state into component property, so we can always a
 */
   state = {
     isOpen: false,
-    confirmSell: false
+    confirmSell: false,
   };
 
   static propTypes = {
@@ -30,7 +30,7 @@ mapStateToProps we want to map state into component property, so we can always a
     auth: PropTypes.object.isRequired,
     error: PropTypes.object.isRequired,
     success: PropTypes.object,
-    user: PropTypes.object
+    user: PropTypes.object,
   };
 
   // call api, or making action request, is done as component mounts
@@ -71,7 +71,7 @@ mapStateToProps we want to map state into component property, so we can always a
                     </span>
                     {user.balance.toLocaleString("en-US", {
                       style: "currency",
-                      currency: "USD"
+                      currency: "USD",
                     })}
                   </p>
                 ) : null}
@@ -92,7 +92,7 @@ mapStateToProps we want to map state into component property, so we can always a
         ) : null}
         <Container>
           {user
-            ? user.history.map(item => (
+            ? user.history.map((item) => (
                 <Row className="mt-2 mb-2 justify-content-center">
                   <Col className="paper-shadow-class mt-2 mb-2" xs={11} lg={12}>
                     <p className="stock-history-entry text-align-vertical text-align-center">
@@ -109,7 +109,7 @@ mapStateToProps we want to map state into component property, so we can always a
 }
 
 // stock is what we used in rootReducer
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   stock: state.stock,
   isAuthenticated: state.auth.isAuthenticated,
   auth: state.auth,
@@ -117,7 +117,7 @@ const mapStateToProps = state => ({
   success: state.success,
   user: state.user,
   history: state.user.history,
-  balance: state.user.balance
+  balance: state.user.balance,
 });
 
 // all actions used in component go in second argument after mapStateToProps
