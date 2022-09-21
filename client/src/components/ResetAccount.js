@@ -1,19 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import { resetUserData, resetStockData } from "../actions/userActions";
 import { Row } from "react-bootstrap";
 
 const ResetAccount = () => {
-  const handleReset = (user) => {
-    props.resetUserData(user);
-    props.resetStockData(user);
+  ResetAccount.propTypes = {
+    resetUserData: PropTypes.func.isRequired,
+    resetStockData: PropTypes.func.isRequired,
+    stock: PropTypes.object.isRequired,
+    isAuthenticated: PropTypes.bool,
+    auth: PropTypes.object.isRequired,
+    error: PropTypes.object.isRequired,
+    success: PropTypes.object,
+    user: PropTypes.object,
+  };
+
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+    stock: null,
+    msg: null,
+    alertOpen: false,
+  });
+
+  const handleReset = (e) => {
+    e.preventDefault();
+    setUser(
+      (user = () => {
+        resetUserData();
+        resetStockData();
+        return user;
+      })
+    );
+    console.log(e);
   };
 
   return (
     <Row className="mt-4 mb-4 justify-content-center">
       <button
-        onClick={() => {
-          handleReset();
+        onClick={(user) => {
+          handleReset(user);
         }}
       >
         Reset Account
