@@ -74,19 +74,19 @@ router.post("/data", (req, res) => {
     .catch((err) => res.status(404).json({ success: false }));
 });
 
-router.post("/reset", authorize, async (req, res) => {
+router.post("/reset/user", authorize, (req, res) => {
   // console.log("Request body for /reset", req.body);
   // const findUser = await User.findById(req.body.user.id);
   // User.findById(req.body.id) //or change this to just req.body.user   if you map id to user in body
-  await User.updateOne(
-    { _id: req.body.user.id },
-    { $set: { history: [] } },
-    { $set: { balance: 100000 } }
-  );
+  console.log("req.body", req.body);
+  User.updateMany(
+    { _id: req.body.user._id },
+    { $set: { history: [], balance: 100000 } }
+  ).then(() => res.json({ success: true }));
 
-  Stock.findById(req.body.id)
-    .then((stock) => stock.remove().then((stock) => res.json(stock._id)))
-    .catch((err) => res.status(404).json({ success: false }));
+  // Stock.findById(req.body.user._id)
+  //   .then((stock) => stock.remove().then((stock) => res.json(stock._id)))
+  //   .catch((err) => res.status(404).json({ success: false }));
 });
 
 //DELETE User

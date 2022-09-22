@@ -10,7 +10,7 @@ import {
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
-  REGISTER_FAIL
+  REGISTER_FAIL,
 } from "../actions/types";
 
 // Check token and load user
@@ -22,10 +22,10 @@ export const loadUser = () => (dispatch, getState) => {
 
   axios
     .post("/api/authorize/user", tokenConfig(getState))
-    .then(res =>
+    .then((res) =>
       dispatch({
         type: USER_LOADED,
-        payload: res.data //res.data should be the whole response. the token, and the user object
+        payload: res.data, //res.data should be the whole response. the token, and the user object
       })
     )
     .then(() => {
@@ -37,94 +37,99 @@ export const loadUser = () => (dispatch, getState) => {
     })
 
     //call error action to get errors if there are some. returnErrors takes in parameters, then returns object with errors
-    .catch(err => {
+    .catch((err) => {
       dispatch(returnErrors(err));
       dispatch({
-        type: AUTH_ERROR
+        type: AUTH_ERROR,
       });
     });
 };
 
 // Register user
-export const register = ({ name, email, password }) => dispatch => {
-  dispatch({ type: USER_LOADING });
-  // configure headers
-  const config = {
-    headers: {
-      "Content-type": "application/json"
-    }
-  };
+export const register =
+  ({ name, email, password }) =>
+  (dispatch) => {
+    dispatch({ type: USER_LOADING });
+    // configure headers
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+      },
+    };
 
-  // Request body data
-  const body = JSON.stringify({ name, email, password });
+    // Request body data
+    const body = JSON.stringify({ name, email, password });
 
-  // send POST request to user api endpoint
-  axios
-    .post("/api/user", body, config)
-    .then(res =>
-      dispatch({
-        type: REGISTER_SUCCESS,
-        payload: res.data
-      })
-    )
-    .catch(err => {
-      dispatch(
-        returnErrors(err.response.data, err.response.status, "REGISTER_FAIL")
-      );
-      dispatch({
-        type: REGISTER_FAIL
+    // send POST request to user api endpoint
+    axios
+      .post("/api/user", body, config)
+      .then((res) =>
+        dispatch({
+          type: REGISTER_SUCCESS,
+          payload: res.data,
+        })
+      )
+      .catch((err) => {
+        dispatch(
+          returnErrors(err.response.data, err.response.status, "REGISTER_FAIL")
+        );
+        dispatch({
+          type: REGISTER_FAIL,
+        });
       });
-    });
-};
+  };
 
 // Login user
-export const login = ({ email, password }) => dispatch => {
-  dispatch({ type: USER_LOADING });
-  // configure headers
-  const config = {
-    headers: {
-      "Content-type": "application/json"
-    }
-  };
+export const login =
+  ({ email, password }) =>
+  (dispatch) => {
+    console.log("login fired...");
+    dispatch({ type: USER_LOADING });
+    // configure headers
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+      },
+    };
 
-  // Request body data
-  const body = JSON.stringify({ email, password });
+    // Request body data
+    const body = JSON.stringify({ email, password });
 
-  // send POST request to user api endpoint
-  axios
-    .post("/api/authorize", body, config)
-    .then(res =>
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: res.data
-      })
-    )
-    .catch(err => {
-      dispatch(
-        returnErrors(err.response.data, err.response.status, "LOGIN_FAIL")
-      );
-      dispatch({
-        type: LOGIN_FAIL
+    // send POST request to user api endpoint
+    axios
+      .post("/api/authorize", body, config)
+      .then((res) =>
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res.data,
+        })
+      )
+      .catch((err) => {
+        dispatch(
+          returnErrors(err.response.data, err.response.status, "LOGIN_FAIL")
+        );
+        dispatch({
+          type: LOGIN_FAIL,
+        });
       });
-    });
-};
+  };
 
 // Logout User
 export const logout = () => {
   return {
-    type: LOGOUT_SUCCESS
+    type: LOGOUT_SUCCESS,
   };
 };
 
-export const tokenConfig = getState => {
+export const tokenConfig = (getState) => {
   //get token from localStorage. this is in our state
   const token = getState().auth.token;
 
   // Now add token to headers
   const config = {
     headers: {
-      "Content-type": "application/json"
-    }
+      "Content-type": "application/json",
+    },
   };
 
   // If token, add to headers

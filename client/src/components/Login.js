@@ -14,7 +14,7 @@ import {
   Nav,
   Row,
   Navbar,
-  Image
+  Image,
 } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 
@@ -24,14 +24,14 @@ class Login extends Component {
     email: "",
     password: "",
     msg: null,
-    alertOpen: false
+    alertOpen: false,
   };
 
   static propTypes = {
     isAuthenticated: PropTypes.bool,
     error: PropTypes.object.isRequired,
     login: PropTypes.func.isRequired,
-    clearErrors: PropTypes.func.isRequired
+    clearErrors: PropTypes.func.isRequired,
   };
 
   // Lifecylce method for when component updates. takes in previous props as arg
@@ -50,16 +50,20 @@ class Login extends Component {
     }
   }
 
+  handleConsole = () => {
+    console.log("this.props", this.props);
+  };
+
   handleAlert = () => {
     alert(this.state.msg);
     this.props.clearErrors();
   };
 
-  onChange = e => {
+  onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     //console.log("logging in...");
     this.props.clearErrors();
     e.preventDefault();
@@ -68,7 +72,7 @@ class Login extends Component {
 
     const userLogin = {
       email: email,
-      password: password
+      password: password,
     };
 
     // Try to log in user
@@ -76,6 +80,7 @@ class Login extends Component {
   };
 
   render() {
+    this.handleConsole();
     //console.log("Login component rendered");
     if (this.props.isAuthenticated === true) {
       return <Redirect push to="/" />;
@@ -144,7 +149,7 @@ class Login extends Component {
             <Nav.Link
               className="green-theme-text"
               style={{
-                fontSize: "0.8rem"
+                fontSize: "0.8rem",
               }}
               href="https://johnrao.com/"
             >
@@ -173,9 +178,9 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
-  error: state.error
+  error: state.error,
 });
 
 export default connect(mapStateToProps, { login, clearErrors })(Login);

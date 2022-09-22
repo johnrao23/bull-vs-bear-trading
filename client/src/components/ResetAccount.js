@@ -1,36 +1,28 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { useReducer } from "react";
+import { connect, useDispatch, useSelector } from "react-redux";
+// import PropTypes from "prop-types";
 import { resetUserData, resetStockData } from "../actions/userActions";
 import { Row } from "react-bootstrap";
 
-const ResetAccount = (props) => {
-  const initialState = {
-    name: "",
-    email: "",
-    password: "",
-    stock: null,
-    msg: null,
-    alertOpen: false,
-  };
+const ResetAccount = () => {
+  // ResetAccount.propTypes = {
+  //   resetUserData: PropTypes.func.isRequired,
+  //   resetStockData: PropTypes.func.isRequired,
+  //   stock: PropTypes.object.isRequired,
+  //   isAuthenticated: PropTypes.bool,
+  //   auth: PropTypes.object.isRequired,
+  //   error: PropTypes.object.isRequired,
+  //   success: PropTypes.object,
+  //   user: PropTypes.object,
+  // };
 
-  const [user, setUser] = useState(initialState);
-
-  ResetAccount.propTypes = {
-    resetUserData: PropTypes.func.isRequired,
-    resetStockData: PropTypes.func.isRequired,
-    stock: PropTypes.object.isRequired,
-    isAuthenticated: PropTypes.bool,
-    auth: PropTypes.object.isRequired,
-    error: PropTypes.object.isRequired,
-    success: PropTypes.object,
-    user: PropTypes.object,
-  };
+  const dispatch = useDispatch();
+  const user = useSelector((store) => store.user);
 
   const handleReset = () => {
-    setUser(user.props.resetUserData(), user.props.resetStockData());
+    dispatch(resetUserData(user));
+    dispatch(resetStockData(user));
   };
-  console.log(handleReset());
 
   return (
     <Row className="mt-4 mb-4 justify-content-center">
@@ -45,17 +37,19 @@ const ResetAccount = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  stock: state.stock,
-  isAuthenticated: state.auth.isAuthenticated,
-  auth: state.auth,
-  error: state.error,
-  success: state.success,
-  user: state.user,
-  history: state.user.history,
-  balance: state.user.balance,
-});
+// const mapStateToProps = (state) => ({
+//   stock: state.stock,
+//   isAuthenticated: state.auth.isAuthenticated,
+//   auth: state.auth,
+//   error: state.error,
+//   success: state.success,
+//   user: state.user,
+//   history: state.user.history,
+//   balance: state.user.balance,
+// });
 
-export default connect(mapStateToProps, { resetUserData, resetStockData })(
-  ResetAccount
-);
+// export default connect(mapStateToProps, { resetUserData, resetStockData })(
+//   ResetAccount
+// );
+
+export default ResetAccount;

@@ -2,6 +2,7 @@
 import axios from "axios";
 import { REFRESH_USER_DATA, RESET_USER_DATA, RESET_STOCK_DATA } from "./types";
 import { returnErrors } from "./errorActions";
+import { tokenConfig } from "./authActions";
 
 export const refreshUserData = (user) => (dispatch) => {
   // User loading. dispatch this action, Pass this in before anything to change the state of application to loading
@@ -24,9 +25,10 @@ export const refreshUserData = (user) => (dispatch) => {
   };
 };
 
-export const resetUserData = (user) => (dispatch) => {
+export const resetUserData = (user) => (dispatch, getState) => {
+  console.log("user", user);
   axios
-    .post("/api/user/reset", user)
+    .post("/api/user/reset", user, tokenConfig(getState))
     .then((res) => {
       console.log("Reset user data: ", res.data);
       dispatch({
@@ -43,9 +45,9 @@ export const resetUserData = (user) => (dispatch) => {
   };
 };
 
-export const resetStockData = (user) => (dispatch) => {
+export const resetStockData = (user) => (dispatch, getState) => {
   axios
-    .post("/api/user/reset", user)
+    .post("/api/user/reset", user, tokenConfig(getState))
     .then((res) => {
       dispatch({
         type: RESET_STOCK_DATA,
