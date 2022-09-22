@@ -4,7 +4,18 @@ import PropTypes from "prop-types";
 import { resetUserData, resetStockData } from "../actions/userActions";
 import { Row } from "react-bootstrap";
 
-const ResetAccount = () => {
+const ResetAccount = (props) => {
+  const initialState = {
+    name: "",
+    email: "",
+    password: "",
+    stock: null,
+    msg: null,
+    alertOpen: false,
+  };
+
+  const [user, setUser] = useState(initialState);
+
   ResetAccount.propTypes = {
     resetUserData: PropTypes.func.isRequired,
     resetStockData: PropTypes.func.isRequired,
@@ -16,32 +27,16 @@ const ResetAccount = () => {
     user: PropTypes.object,
   };
 
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    password: "",
-    stock: null,
-    msg: null,
-    alertOpen: false,
-  });
-
-  const handleReset = (e) => {
-    e.preventDefault();
-    setUser(
-      (user = () => {
-        resetUserData();
-        resetStockData();
-        return user;
-      })
-    );
-    console.log(e);
+  const handleReset = () => {
+    setUser(user.props.resetUserData(), user.props.resetStockData());
   };
+  console.log(handleReset());
 
   return (
     <Row className="mt-4 mb-4 justify-content-center">
       <button
-        onClick={(user) => {
-          handleReset(user);
+        onClick={() => {
+          handleReset();
         }}
       >
         Reset Account
