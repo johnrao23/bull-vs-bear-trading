@@ -18,7 +18,7 @@ class NavBar extends Component {
       email: "",
       password: "",
       msg: null,
-      alertOpen: false
+      alertOpen: false,
     };
   }
 
@@ -28,7 +28,7 @@ class NavBar extends Component {
     register: PropTypes.func,
     clearErrors: PropTypes.func,
     stock: PropTypes.object.isRequired,
-    user: PropTypes.object
+    user: PropTypes.object,
   };
 
   render() {
@@ -93,9 +93,9 @@ class NavBar extends Component {
             <span className="bold-text">
               {user
                 ? "Balance: " +
-                  user.balance.toLocaleString("en-US", {
+                  user.balance?.toLocaleString("en-US", {
                     style: "currency",
-                    currency: "USD"
+                    currency: "USD",
                   })
                 : ""}
             </span>
@@ -109,13 +109,13 @@ class NavBar extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   auth: state.auth,
   error: state.error,
   stock: state.stock,
   user: state.user,
-  balance: state.user.balance
+  balance: state.user.balance,
 });
 
 export default connect(mapStateToProps, { refreshUserData })(NavBar);

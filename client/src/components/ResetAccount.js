@@ -1,7 +1,8 @@
-import React, { useReducer } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 // import PropTypes from "prop-types";
-import { resetUserData, resetStockData } from "../actions/userActions";
+import { resetUserData } from "../actions/userActions";
+import { resetStockData } from "../actions/stockActions";
 import { Row } from "react-bootstrap";
 
 const ResetAccount = () => {
@@ -18,10 +19,12 @@ const ResetAccount = () => {
 
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
+  const stock = useSelector((store) => store.stock);
+  console.log(stock);
 
   const handleReset = () => {
     dispatch(resetUserData(user));
-    dispatch(resetStockData(user));
+    dispatch(resetStockData(stock));
   };
 
   return (

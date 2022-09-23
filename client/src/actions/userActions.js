@@ -1,6 +1,6 @@
 //actions are where we actually make request to backend
 import axios from "axios";
-import { REFRESH_USER_DATA, RESET_USER_DATA, RESET_STOCK_DATA } from "./types";
+import { REFRESH_USER_DATA, RESET_USER_DATA } from "./types";
 import { returnErrors } from "./errorActions";
 import { tokenConfig } from "./authActions";
 
@@ -26,9 +26,8 @@ export const refreshUserData = (user) => (dispatch) => {
 };
 
 export const resetUserData = (user) => (dispatch, getState) => {
-  console.log("user", user);
   axios
-    .post("/api/user/reset", user, tokenConfig(getState))
+    .post("/api/user/reset/user", user, tokenConfig(getState))
     .then((res) => {
       console.log("Reset user data: ", res.data);
       dispatch({
@@ -41,24 +40,6 @@ export const resetUserData = (user) => (dispatch, getState) => {
     });
   return {
     type: RESET_USER_DATA,
-    payload: user,
-  };
-};
-
-export const resetStockData = (user) => (dispatch, getState) => {
-  axios
-    .post("/api/user/reset", user, tokenConfig(getState))
-    .then((res) => {
-      dispatch({
-        type: RESET_STOCK_DATA,
-        payload: res.data,
-      });
-    })
-    .catch((err) => {
-      dispatch(returnErrors(err));
-    });
-  return {
-    type: RESET_STOCK_DATA,
     payload: user,
   };
 };

@@ -7,49 +7,49 @@ var moment = require("moment");
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    trim: true
+    trim: true,
   },
 
   date: {
     type: String,
-    default: moment().format("MMMM Do YYYY, h:mm:ss a")
+    default: moment().format("MMMM Do YYYY, h:mm:ss a"),
   },
 
   history: [
     {
       type: String,
-      default: "Joined on " + moment().format("l")
-    }
+      default: "Joined on " + moment().format("l"),
+    },
   ],
 
   balance: {
     type: Number,
-    default: 100000
+    default: 100000,
   },
 
   cash: {
     type: Number,
-    default: 100000
+    default: 100000,
   },
 
   email: {
     type: String,
     lowercase: true,
-    unique: true
+    unique: true,
   },
 
   password: {
-    type: String
+    type: String,
   },
 
   tokens: [
     {
       token: {
         type: String,
-        required: true
-      }
-    }
-  ]
+        required: true,
+      },
+    },
+  ],
 });
 
 /*

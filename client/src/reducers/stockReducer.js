@@ -61,6 +61,7 @@ export default function (state = initialState, action) {
     case RESET_STOCK_DATA:
       return {
         ...state,
+        stocks: [...state.stocks, action.payload],
         // we use spread operator because we can't directly mutate state, we just add to it
       };
 

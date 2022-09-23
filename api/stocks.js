@@ -11,7 +11,7 @@ const User = require("../models/user");
 
 router.post("/find", (req, res) => {
   //console.log("Stock api get:" + req.body.id);
-  Stock.find({ user: req.body.id }).then(stock => res.json(stock));
+  Stock.find({ user: req.body.id }).then((stock) => res.json(stock));
 });
 
 // Add new stock
@@ -20,10 +20,10 @@ router.post("/add", authorize, (req, res) => {
   const newStock = new Stock({
     name: req.body.name,
     price: req.body.price,
-    quantity: req.body.quantity
+    quantity: req.body.quantity,
   });
 
-  newStock.save().then(stock => res.json(stock));
+  newStock.save().then((stock) => res.json(stock));
 });
 
 router.post("/buy", authorize, async (req, res) => {
@@ -62,7 +62,7 @@ router.post("/buy", authorize, async (req, res) => {
       " for" +
       value.toLocaleString("en-US", {
         style: "currency",
-        currency: "USD"
+        currency: "USD",
       }) +
       ".";
     console.log(historyEntry);
@@ -79,10 +79,10 @@ router.post("/buy", authorize, async (req, res) => {
     quantity: req.body.quantity,
     data: req.body.data,
     value: req.body.value,
-    user: findUser
+    user: findUser,
   });
 
-  purchasedStock.save().then(stock => res.json(stock));
+  purchasedStock.save().then((stock) => res.json(stock));
 });
 
 //DELETE Stock
@@ -117,8 +117,14 @@ router.post("/delete", authorize, async (req, res) => {
   );
 
   Stock.findById(req.body.id)
-    .then(stock => stock.remove().then(stock => res.json(stock._id)))
-    .catch(err => res.status(404).json({ success: false }));
+    .then((stock) => stock.remove().then((stock) => res.json(stock._id)))
+    .catch((err) => res.status(404).json({ success: false }));
+});
+
+router.post("/reset/stocks", authorize, (req, res) => {
+  Stock.updateMany({ user: req.body.stocks.user }).then(() =>
+    res.json({ success: true })
+  );
 });
 
 module.exports = router;

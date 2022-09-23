@@ -69,7 +69,7 @@ mapStateToProps we want to map state into component property, so we can always a
                     <span style={{ fontStyle: "italic" }}>
                       Current Balance:{" "}
                     </span>
-                    {user.balance.toLocaleString("en-US", {
+                    {user.balance?.toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
                     })}
@@ -92,7 +92,7 @@ mapStateToProps we want to map state into component property, so we can always a
         ) : null}
         <Container>
           {user
-            ? user.history.map((item) => (
+            ? user.history?.map((item) => (
                 <Row className="mt-2 mb-2 justify-content-center">
                   <Col className="paper-shadow-class mt-2 mb-2" xs={11} lg={12}>
                     <p className="stock-history-entry text-align-vertical text-align-center">
