@@ -94,7 +94,7 @@ class Login extends Component {
             className="paper-shadow-class splashImageFace"
           ></Image>
         </Row>
-        <Row className="justify-content-center">
+        <Row className="justify-content-center mt-4">
           <h1>Log in</h1>
         </Row>
         {this.state.msg ? (
