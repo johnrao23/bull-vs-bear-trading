@@ -88,9 +88,13 @@ class Login extends Component {
     return (
       <Container>
         <Row className="mt-4 justify-content-center">
-          <Image src={logo} alt="bvb logo" className="splashImageFace"></Image>
+          <Image
+            src={logo}
+            alt="bvb logo"
+            className="paper-shadow-class splashImageFace"
+          ></Image>
         </Row>
-        <Row className="justify-content-center mt-4">
+        <Row className="justify-content-center">
           <h1>Log in</h1>
         </Row>
         {this.state.msg ? (
