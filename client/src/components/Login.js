@@ -88,11 +88,7 @@ class Login extends Component {
     return (
       <Container>
         <Row className="mt-4 justify-content-center">
-          <Image
-            src={logo}
-            alt="bvb logo"
-            className="paper-shadow-class splashImageFace"
-          ></Image>
+          <Image src={logo} alt="bvb logo" className="splashImageFace"></Image>
         </Row>
         <Row className="justify-content-center mt-4">
           <h1>Log in</h1>
