@@ -24,7 +24,7 @@ var stockTickerList = [
   "INTC",
   "WORK",
   "GOOGL",
-  "TSLA"
+  "TSLA",
 ];
 
 function shuffleArray(array) {
@@ -40,7 +40,7 @@ function shuffleArray(array) {
 
 class StockNews extends Component {
   state = {
-    stockNewsArray: []
+    stockNewsArray: [],
   };
 
   static propTypes = {
@@ -49,7 +49,7 @@ class StockNews extends Component {
     register: PropTypes.func,
     clearErrors: PropTypes.func,
     isLoading: PropTypes.bool,
-    user: PropTypes.object
+    user: PropTypes.object,
   };
 
   componentDidMount() {
@@ -58,21 +58,36 @@ class StockNews extends Component {
     this.fetchNews(shuffledStocks);
   }
 
-  fetchNews = async shuffledStocks => {
+  fetchNews = async (shuffledStocks) => {
     try {
       for (let i = 0; i < shuffledStocks.length; i++) {
-        var stockNews = await fetch(
-          `https://cloud.iexapis.com/v1/stock/${shuffledStocks[i]}/news/last/1?token=${process.env.REACT_APP_IEX_TOKEN}`,
-          {
-            mode: "cors"
-          }
-        ); //,{ mode: "cors" }
-        var response = await stockNews.json();
-        console.log(response);
-        var immutArray = this.state.stockNewsArray.concat(response);
-        // temporarily show stock metrics so user can decide if they want to buy stock
+        const url = `https://real-time-finance-data.p.rapidapi.com/stock-news?symbol=${shuffledStocks[i]}:NASDAQ&language=en`;
+        const options = {
+          method: "GET",
+          headers: {
+            "X-RapidAPI-Key": process.env.REACT_APP_RTF_TOKEN,
+            "X-RapidAPI-Host": "real-time-finance-data.p.rapidapi.com",
+          },
+        };
+
+        const stockNews = await fetch(url, options);
+        if (!stockNews.ok) throw new Error("No stock news found.");
+        const response = await stockNews.json();
+        const newsItem = response.data.news[0];
+
+        // Concatenate the new news item to the existing array
+        var immutArray = this.state.stockNewsArray.concat({
+          related: response.data.symbol.split(":")[0],
+          image: newsItem.article_photo_url,
+          headline: newsItem.article_title,
+          url: newsItem.article_url,
+          source: newsItem.source,
+          // ... and other properties as needed
+        });
+
+        // Update the state with the new array
         this.setState({
-          stockNewsArray: immutArray
+          stockNewsArray: immutArray,
         });
       }
     } catch (error) {
@@ -87,12 +102,48 @@ class StockNews extends Component {
             related: "",
             image: "",
             lang: "",
-            hasPaywall: ""
-          }
-        ]
+            hasPaywall: "",
+          },
+        ],
       });
     }
   };
+
+  // fetchNews = async shuffledStocks => {
+  //   try {
+  //     for (let i = 0; i < shuffledStocks.length; i++) {
+  //       var stockNews = await fetch(
+  //         `https://cloud.iexapis.com/v1/stock/${shuffledStocks[i]}/news/last/1?token=${process.env.REACT_APP_IEX_TOKEN}`,
+  //         {
+  //           mode: "cors"
+  //         }
+  //       ); //,{ mode: "cors" }
+  //       var response = await stockNews.json();
+  //       console.log(response);
+  //       var immutArray = this.state.stockNewsArray.concat(response);
+  //       // temporarily show stock metrics so user can decide if they want to buy stock
+  //       this.setState({
+  //         stockNewsArray: immutArray
+  //       });
+  //     }
+  //   } catch (error) {
+  //     this.setState({
+  //       stockNewsArray: [
+  //         {
+  //           datetime: "",
+  //           headline: "No recent stock news found.",
+  //           source: "",
+  //           url: "",
+  //           summary: "",
+  //           related: "",
+  //           image: "",
+  //           lang: "",
+  //           hasPaywall: ""
+  //         }
+  //       ]
+  //     });
+  //   }
+  // };
 
   render() {
     // this includes all the state values
@@ -106,7 +157,7 @@ class StockNews extends Component {
             <Row className="justify-content-center mb-6 mt-4">
               <h1>News</h1>
             </Row>
-            {this.state.stockNewsArray.map(item => (
+            {this.state.stockNewsArray.map((item) => (
               <div>
                 <Row className="pr-4 pl-2 mt-4 mb-4 justify-content-md-center">
                   <Col className="no-spacing-news-col" xs={4} md={2}>
@@ -114,7 +165,7 @@ class StockNews extends Component {
                       <Image
                         className="no-spacing-news-image stock-news-image align-self-center"
                         src={item.image}
-                        onError={e => {
+                        onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = logo;
                         }}
@@ -157,13 +208,13 @@ class StockNews extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   stock: state.stock,
   isAuthenticated: state.auth.isAuthenticated,
   auth: state.auth,
   error: state.error,
   isloading: state.auth.isLoading,
-  user: state.user
+  user: state.user,
 });
 
 export default connect(mapStateToProps)(StockNews);
