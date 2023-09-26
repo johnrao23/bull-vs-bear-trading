@@ -8,7 +8,7 @@ import {
   Container,
   Table,
   FormControl,
-  InputGroup
+  InputGroup,
 } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -29,7 +29,7 @@ const customStyles = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(255, 255, 255, 0.25)"
+    backgroundColor: "rgba(255, 255, 255, 0.25)",
   },
   content: {
     top: "50%",
@@ -37,8 +37,8 @@ const customStyles = {
     right: "auto",
     bottom: "auto",
     marginRight: "-50%",
-    transform: "translate(-50%, -50%)"
-  }
+    transform: "translate(-50%, -50%)",
+  },
 };
 
 class Search extends Component {
@@ -57,7 +57,7 @@ class Search extends Component {
       high: "",
       low: "",
       quantity: "",
-      isEnabled: false
+      isEnabled: false,
     };
     this.onQuantityChange = this.onQuantityChange.bind(this);
     this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -70,21 +70,21 @@ class Search extends Component {
     error: PropTypes.object,
     user: PropTypes.object,
     clearErrors: PropTypes.func,
-    buyStock: PropTypes.func.isRequired
+    buyStock: PropTypes.func.isRequired,
   };
 
-  onChange = e => {
+  onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  onQuantityChange = e => {
+  onQuantityChange = (e) => {
     const re = /^[0-9\b]+$/;
     if (e.target.value === "" || re.test(e.target.value)) {
       this.setState({ quantity: e.target.value, isEnabled: true });
     }
   };
 
-  handleOpenModal = e => {
+  handleOpenModal = (e) => {
     e.preventDefault();
     console.log(e);
     let quantity = e.target.elements.quantity.value;
@@ -95,35 +95,67 @@ class Search extends Component {
     this.setState({ showModal: false });
   }
 
-  onSubmit = async e => {
-    //this.props.clearErrors();
+  onSubmit = async (e) => {
     e.preventDefault();
     let ticker = e.target.elements.stockTicker.value;
     try {
-      const searchStock = await fetch(
-        `https://cloud.iexapis.com/v1/stock/${ticker}/quote/2?token=${process.env.REACT_APP_IEX_TOKEN}`,
-        {
-          mode: "cors"
-        }
-      ); //,{ mode: "cors" }
-      const response = await searchStock.json();
+      const url = `https://real-time-finance-data.p.rapidapi.com/stock-quote?symbol=${ticker}:NASDAQ&language=en`;
+      const options = {
+        method: "GET",
+        headers: {
+          "X-RapidAPI-Key": process.env.REACT_APP_RTF_TOKEN,
+          "X-RapidAPI-Host": "real-time-finance-data.p.rapidapi.com",
+        },
+      };
 
-      // temporarily show stock metrics so user can decide if they want to buy stock
+      const searchStock = await fetch(url, options);
+      if (!searchStock.ok) throw new Error("No stock found matching ticker");
+      const response = await searchStock.json();
+      const stockData = response.data.stock[0];
+
       this.setState({
-        data: response,
-        stock: response.companyName,
-        ticker: response.symbol,
-        price: response.latestPrice,
-        percentChange: numeral(response.changePercent).format("0.00%"),
-        ytdChange: numeral(response.ytdChange).format("0.00%"),
-        high: numeral(response.week52High).format("$0,0.00"),
-        low: numeral(response.week52Low).format("$0,0.00")
+        data: stockData,
+        stock: stockData.name,
+        ticker: stockData.symbol.split(":")[0], // Extracting the ticker symbol from the symbol property
+        price: stockData.price,
+        percentChange: numeral(stockData.change_percent).format("0.00%"),
+        // Other state updates based on the new API response structure
       });
     } catch (error) {
-      alert("No stock found matching ticker");
+      alert(error.message);
       document.getElementById("stockSearchForm").reset();
     }
   };
+
+  // onSubmit = async e => {
+  //   //this.props.clearErrors();
+  //   e.preventDefault();
+  //   let ticker = e.target.elements.stockTicker.value;
+  //   try {
+  //     const searchStock = await fetch(
+  //       `https://cloud.iexapis.com/v1/stock/${ticker}/quote/2?token=${process.env.REACT_APP_IEX_TOKEN}`,
+  //       {
+  //         mode: "cors"
+  //       }
+  //     ); //,{ mode: "cors" }
+  //     const response = await searchStock.json();
+
+  //     // temporarily show stock metrics so user can decide if they want to buy stock
+  //     this.setState({
+  //       data: response,
+  //       stock: response.companyName,
+  //       ticker: response.symbol,
+  //       price: response.latestPrice,
+  //       percentChange: numeral(response.changePercent).format("0.00%"),
+  //       ytdChange: numeral(response.ytdChange).format("0.00%"),
+  //       high: numeral(response.week52High).format("$0,0.00"),
+  //       low: numeral(response.week52Low).format("$0,0.00")
+  //     });
+  //   } catch (error) {
+  //     alert("No stock found matching ticker");
+  //     document.getElementById("stockSearchForm").reset();
+  //   }
+  // };
 
   buyStockSubmit = () => {
     //this.props.clearErrors();
@@ -149,7 +181,7 @@ class Search extends Component {
       price: this.state.price,
       value: value,
       quantity: this.state.quantity,
-      user: userBuying.id
+      user: userBuying.id,
     };
 
     // Try to buy stock
@@ -165,7 +197,7 @@ class Search extends Component {
       high: "",
       low: "",
       quantity: "",
-      isEnabled: true
+      isEnabled: true,
     });
 
     document.getElementById("stockSearchForm").reset();
@@ -274,7 +306,7 @@ class Search extends Component {
             share(s) of {this.state.ticker} at{" "}
             {Number(this.state.price).toLocaleString("en-US", {
               style: "currency",
-              currency: "USD"
+              currency: "USD",
             }) + " "}{" "}
             each?
           </p>
@@ -292,11 +324,11 @@ class Search extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   auth: state.auth,
   error: state.error,
-  user: state.user
+  user: state.user,
 });
 
 export default connect(mapStateToProps, { buyStock, refreshUserData })(Search);
