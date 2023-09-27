@@ -13,7 +13,7 @@ function randomColor() {
   return color;
 }
 
-const renderActiveShape = props => {
+const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
   const {
     cx,
@@ -26,7 +26,7 @@ const renderActiveShape = props => {
     fill,
     payload,
     percent,
-    value
+    value,
   } = props;
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
@@ -88,21 +88,21 @@ const renderActiveShape = props => {
 
 class StockChart extends Component {
   state = {
-    activeIndex: 0
+    activeIndex: 0,
   };
 
   static propTypes = {
     stock: PropTypes.object,
     isAuthenticated: PropTypes.bool,
     auth: PropTypes.object,
-    user: PropTypes.object
+    user: PropTypes.object,
   };
 
   render() {
     var { stocks } = this.props.stock;
     const { user } = this.props.user;
 
-    var newArray = stocks.map(stock => {
+    var newArray = stocks.map((stock) => {
       return { name: stock.ticker, value: Number(stock.value) };
     });
     if (user) {
@@ -113,13 +113,18 @@ class StockChart extends Component {
       <div>
         <PieChart width={600} height={300}>
           <Pie
+            activeIndex={this.state.activeIndex}
+            activeShape={renderActiveShape}
             data={newArray}
+            cx={300}
+            cy={150}
             innerRadius={40}
             outerRadius={80}
-            fill="rgb(33, 206, 153)"
+            fill="#8884d8"
+            dataKey="value"
           >
             {newArray.map((entry, index) => (
-              <Cell fill={randomColor()}></Cell>
+              <Cell key={index} fill={randomColor()} />
             ))}
           </Pie>
           <Tooltip />
@@ -129,11 +134,11 @@ class StockChart extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   stock: state.stock,
   isAuthenticated: state.auth.isAuthenticated,
   auth: state.auth,
-  user: state.user
+  user: state.user,
 });
 
 export default connect(mapStateToProps)(StockChart);
