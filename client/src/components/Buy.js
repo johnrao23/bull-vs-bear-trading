@@ -126,6 +126,9 @@ class Search extends Component {
         ticker: stockData.symbol.split(":")[0], // Extracting the ticker symbol from the symbol property
         price: stockData.price,
         percentChange: numeral(stockData.change_percent).format("0.00%"),
+        ytdChange: numeral(stockData.change).format("0.00%"),
+        high: numeral(stockData.high).format("$0,0.00"),
+        low: numeral(stockData.low).format("$0,0.00"),
       });
     } catch (error) {
       alert(error.message);
@@ -264,11 +267,13 @@ class Search extends Component {
                     <tbody>
                       <tr>
                         <td className="text-center">
-                          {this.state.percentChange}
+                          {this.state.data.change_percent}
                         </td>
-                        <td className="text-center">{this.state.ytdChange}</td>
-                        <td className="text-center">{this.state.high}</td>
-                        <td className="text-center">{this.state.low}</td>
+                        <td className="text-center">
+                          {this.state.data.change}
+                        </td>
+                        <td className="text-center">{this.state.data.high}</td>
+                        <td className="text-center">{this.state.data.low}</td>
                       </tr>
                     </tbody>
                   </Table>
