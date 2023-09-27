@@ -110,8 +110,15 @@ class Search extends Component {
 
       const searchStock = await fetch(url, options);
       if (!searchStock.ok) throw new Error("No stock found matching ticker");
+
       const response = await searchStock.json();
-      const stockData = response.data.stock[0];
+
+      if (!response.data) {
+        throw new Error("Unexpected API response structure");
+      }
+
+      // Directly using response.data to set the state
+      const stockData = response.data;
 
       this.setState({
         data: stockData,
@@ -119,7 +126,6 @@ class Search extends Component {
         ticker: stockData.symbol.split(":")[0], // Extracting the ticker symbol from the symbol property
         price: stockData.price,
         percentChange: numeral(stockData.change_percent).format("0.00%"),
-        // Other state updates based on the new API response structure
       });
     } catch (error) {
       alert(error.message);
