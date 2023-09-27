@@ -157,8 +157,8 @@ class StockNews extends Component {
             <Row className="justify-content-center mb-6 mt-4">
               <h1>News</h1>
             </Row>
-            {this.state.stockNewsArray.map((item) => (
-              <div>
+            {this.state.stockNewsArray.map((item, index) => (
+              <div key={index}>
                 <Row className="pr-4 pl-2 mt-4 mb-4 justify-content-md-center">
                   <Col className="no-spacing-news-col" xs={4} md={2}>
                     {item.image ? (
