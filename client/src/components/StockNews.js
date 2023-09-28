@@ -96,7 +96,8 @@ class StockNews extends Component {
       this.setState((prevState) => ({
         stockNewsArray: prevState.stockNewsArray.concat({
           datetime: "",
-          headline: `Error fetching news for ${shuffledStocks[i]}: ${error.message}`,
+          headline:
+            "Error fetching news for ${shuffledStocks[i]}: ${error.message}",
           source: "",
           url: "",
           summary: "",
