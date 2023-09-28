@@ -58,9 +58,9 @@ class StockNews extends Component {
   }
 
   fetchNews = async (shuffledStocks) => {
-    let i = 0;
     try {
-      for (i = 0; i < shuffledStocks.length; i++) {
+      let newsCount = 0; // Variable to keep track of how many stocks with news have been found
+      for (let i = 0; i < shuffledStocks.length; i++) {
         const url = `https://real-time-finance-data.p.rapidapi.com/stock-news?symbol=${shuffledStocks[i]}:NASDAQ&language=en`;
         const options = {
           method: "GET",
@@ -71,15 +71,13 @@ class StockNews extends Component {
         };
 
         const stockNews = await fetch(url, options);
-        if (!stockNews.ok) throw new Error("No stock news found.");
-        const response = await stockNews.json();
 
-        if (!response.data.news || response.data.news.length === 0) {
-          throw new Error("No news items found in the response.");
-        }
+        if (!stockNews.ok) continue; // If the fetch fails, skip to the next stock
+
+        const response = await stockNews.json();
+        if (!response.data.news || !response.data.news.length) continue; // If no news is found, skip to the next stock
 
         const newsItem = response.data.news[0];
-
         this.setState((prevState) => ({
           stockNewsArray: prevState.stockNewsArray.concat({
             related: response.data.symbol.split(":")[0],
@@ -89,21 +87,12 @@ class StockNews extends Component {
             source: newsItem.source,
           }),
         }));
+
+        newsCount += 1;
+        if (newsCount >= 5) break; // If news for 5 stocks have been found, exit the loop
       }
     } catch (error) {
-      console.error(`Error fetching news for ${shuffledStocks[i]}:`, error);
-      this.setState((prevState) => ({
-        stockNewsArray: prevState.stockNewsArray.concat({
-          headline: `Error fetching news for ${shuffledStocks[i]}: ${error.message}`,
-          source: "",
-          url: "",
-          summary: "",
-          related: "",
-          image: "",
-          lang: "",
-          hasPaywall: "",
-        }),
-      }));
+      console.error(error);
     }
   };
 
