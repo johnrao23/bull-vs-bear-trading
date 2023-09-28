@@ -76,14 +76,15 @@ class StockNews extends Component {
         const newsItem = response.data.news[0];
 
         // Concatenate the new news item to the existing array
-        var immutArray = this.state.stockNewsArray.concat({
-          related: response.data.symbol.split(":")[0],
-          image: newsItem.article_photo_url,
-          headline: newsItem.article_title,
-          url: newsItem.article_url,
-          source: newsItem.source,
-          // ... and other properties as needed
-        });
+        var immutArray = this.setState((prevState) => ({
+          stockNewsArray: prevState.stockNewsArray.concat({
+            related: response.data.symbol.split(":")[0],
+            image: newsItem.article_photo_url,
+            headline: newsItem.article_title,
+            url: newsItem.article_url,
+            source: newsItem.source,
+          }),
+        }));
 
         // Update the state with the new array
         this.setState({
@@ -91,21 +92,20 @@ class StockNews extends Component {
         });
       }
     } catch (error) {
-      this.setState({
-        stockNewsArray: [
-          {
-            datetime: "",
-            headline: "No recent stock news found.",
-            source: "",
-            url: "",
-            summary: "",
-            related: "",
-            image: "",
-            lang: "",
-            hasPaywall: "",
-          },
-        ],
-      });
+      console.error(error);
+      this.setState((prevState) => ({
+        stockNewsArray: prevState.stockNewsArray.concat({
+          datetime: "",
+          headline: `Error fetching news for ${shuffledStocks[i]}: ${error.message}`,
+          source: "",
+          url: "",
+          summary: "",
+          related: "",
+          image: "",
+          lang: "",
+          hasPaywall: "",
+        }),
+      }));
     }
   };
 
