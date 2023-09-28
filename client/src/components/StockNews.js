@@ -53,15 +53,14 @@ class StockNews extends Component {
   };
 
   componentDidMount() {
-    var shuffledStocks = shuffleArray(stockTickerList).slice(0, 5);
-
+    const shuffledStocks = shuffleArray(stockTickerList).slice(0, 5);
     this.fetchNews(shuffledStocks);
   }
 
   fetchNews = async (shuffledStocks) => {
     let i = 0;
     try {
-      for (let i = 0; i < shuffledStocks.length; i++) {
+      for (i = 0; i < shuffledStocks.length; i++) {
         const url = `https://real-time-finance-data.p.rapidapi.com/stock-news?symbol=${shuffledStocks[i]}:NASDAQ&language=en`;
         const options = {
           method: "GET",
@@ -74,6 +73,11 @@ class StockNews extends Component {
         const stockNews = await fetch(url, options);
         if (!stockNews.ok) throw new Error("No stock news found.");
         const response = await stockNews.json();
+
+        if (!response.data.news || response.data.news.length === 0) {
+          throw new Error("No news items found in the response.");
+        }
+
         const newsItem = response.data.news[0];
 
         this.setState((prevState) => ({
