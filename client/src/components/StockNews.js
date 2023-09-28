@@ -59,6 +59,7 @@ class StockNews extends Component {
   }
 
   fetchNews = async (shuffledStocks) => {
+    let i = 0;
     try {
       for (let i = 0; i < shuffledStocks.length; i++) {
         const url = `https://real-time-finance-data.p.rapidapi.com/stock-news?symbol=${shuffledStocks[i]}:NASDAQ&language=en`;
@@ -75,8 +76,7 @@ class StockNews extends Component {
         const response = await stockNews.json();
         const newsItem = response.data.news[0];
 
-        // Concatenate the new news item to the existing array
-        var immutArray = this.setState((prevState) => ({
+        this.setState((prevState) => ({
           stockNewsArray: prevState.stockNewsArray.concat({
             related: response.data.symbol.split(":")[0],
             image: newsItem.article_photo_url,
@@ -85,19 +85,12 @@ class StockNews extends Component {
             source: newsItem.source,
           }),
         }));
-
-        // Update the state with the new array
-        this.setState({
-          stockNewsArray: immutArray,
-        });
       }
     } catch (error) {
-      console.error(error);
+      console.error(`Error fetching news for ${shuffledStocks[i]}:`, error);
       this.setState((prevState) => ({
         stockNewsArray: prevState.stockNewsArray.concat({
-          datetime: "",
-          headline:
-            "Error fetching news for ${shuffledStocks[i]}: ${error.message}",
+          headline: `Error fetching news for ${shuffledStocks[i]}: ${error.message}`,
           source: "",
           url: "",
           summary: "",
