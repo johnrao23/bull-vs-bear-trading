@@ -248,14 +248,14 @@ td {
 }
 
 .splashImage {
-  /* margin-top: 50px; */
+  margin-top: 50px;
   width: 250px;
   height: 250px;
 }
 
 .splashImageFace {
   border-radius: 100%;
-  height: auto;
+  height: 150px;
 }
 
 .spacer-row {
