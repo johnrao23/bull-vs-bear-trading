@@ -16,14 +16,14 @@ class Splash extends Component {
     email: "",
     password: "",
     msg: null,
-    alertOpen: false
+    alertOpen: false,
   };
 
   static propTypes = {
     isAuthenticated: PropTypes.bool,
     error: PropTypes.object.isRequired,
     login: PropTypes.func.isRequired,
-    clearErrors: PropTypes.func.isRequired
+    clearErrors: PropTypes.func.isRequired,
   };
 
   // Lifecylce method for when component updates. takes in previous props as arg
@@ -47,7 +47,7 @@ class Splash extends Component {
     this.props.clearErrors();
   };
 
-  onChange = e => {
+  onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -66,7 +66,7 @@ class Splash extends Component {
                 <Image
                   src={logo}
                   alt="bvb logo"
-                  className="paper-shadow-class splashImageFace"
+                  className="splashImageFace"
                 ></Image>
               </Row>
               <Row className="mt-4 justify-content-center">
@@ -110,7 +110,7 @@ class Splash extends Component {
             <Nav.Link
               className="green-theme-text"
               style={{
-                fontSize: "0.8rem"
+                fontSize: "0.8rem",
               }}
               href="https://johnrao.com/"
             >
@@ -139,9 +139,9 @@ class Splash extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
-  error: state.error
+  error: state.error,
 });
 
 export default connect(mapStateToProps, { login, clearErrors })(Splash);
