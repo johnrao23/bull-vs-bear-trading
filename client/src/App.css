@@ -255,7 +255,7 @@ td {
 
 .splashImageFace {
   border-radius: 100%;
-  height: 150px;
+  height: auto;
 }
 
 .spacer-row {
